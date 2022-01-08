@@ -3,8 +3,8 @@
 import assert from 'assert'
 import sinon from 'sinon'
 import formatRFC3339 from '.'
-import toInteger from '../_lib/toInteger/index'
 import addLeadingZeros from '../_lib/addLeadingZeros/index'
+import toInteger from '../_lib/toInteger/index'
 
 // This makes sure we create the consistent offsets across timezones, no matter where these tests are ran.
 function generateOffset(date: Date): string {
@@ -87,10 +87,5 @@ describe('formatRFC3339', () => {
 
   it('throws RangeError if the time value is invalid', () => {
     assert.throws(formatRFC3339.bind(null, new Date(NaN)), RangeError)
-  })
-
-  it('throws TypeError exception if passed less than 1 argument', () => {
-    // @ts-expect-error
-    assert.throws(formatRFC3339.bind(null), TypeError)
   })
 })

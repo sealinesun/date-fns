@@ -2,6 +2,7 @@ import type { LocaleOptions, WeekStartOptions } from '../types'
 import toDate from '../toDate/index'
 import toInteger from '../_lib/toInteger/index'
 import requiredArgs from '../_lib/requiredArgs/index'
+import { getDefaultOptions } from '../_lib/defaults/defaultOptions'
 
 /**
  * @name startOfWeek
@@ -36,12 +37,16 @@ export default function startOfWeek(
 ): Date {
   requiredArgs(1, arguments)
 
+  const defaultOptions = getDefaultOptions()
+
   const options = dirtyOptions || {}
-  const locale = options.locale
+  const locale = options.locale || defaultOptions.locale
   const localeWeekStartsOn =
     locale && locale.options && locale.options.weekStartsOn
   const defaultWeekStartsOn =
-    localeWeekStartsOn == null ? 0 : toInteger(localeWeekStartsOn)
+    localeWeekStartsOn == null
+      ? toInteger(defaultOptions.weekStartsOn)
+      : toInteger(localeWeekStartsOn)
   const weekStartsOn =
     options.weekStartsOn == null
       ? defaultWeekStartsOn

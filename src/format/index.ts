@@ -1,5 +1,4 @@
 import isValid from '../isValid/index'
-import defaultLocale from '../locale/en-US/index'
 import subMilliseconds from '../subMilliseconds/index'
 import toDate from '../toDate/index'
 import formatters from '../_lib/format/formatters/index'
@@ -19,6 +18,8 @@ import type {
   Day,
   FirstWeekContainsDate,
 } from '../types'
+import { getDefaultOptions } from '../_lib/defaults/defaultOptions'
+import defaultLocale from '../_lib/defaults/defaultLocale'
 
 // This RegExp consists of three parts separated by `|`:
 // - [yYQqMLwIdDecihHKkms]o matches any available ordinal number token
@@ -347,14 +348,15 @@ export default function format(
 
   const formatStr = String(dirtyFormatStr)
   const options = dirtyOptions || {}
+  const defaultOptions = getDefaultOptions()
 
-  const locale = options.locale || defaultLocale
+  const locale = options.locale || defaultOptions.locale || defaultLocale
 
   const localeFirstWeekContainsDate =
     locale.options && locale.options.firstWeekContainsDate
   const defaultFirstWeekContainsDate =
     localeFirstWeekContainsDate == null
-      ? 1
+      ? toInteger(defaultOptions.firstWeekContainsDate)
       : toInteger(localeFirstWeekContainsDate)
   const firstWeekContainsDate =
     options.firstWeekContainsDate == null
@@ -370,7 +372,9 @@ export default function format(
 
   const localeWeekStartsOn = locale.options && locale.options.weekStartsOn
   const defaultWeekStartsOn =
-    localeWeekStartsOn == null ? 0 : toInteger(localeWeekStartsOn)
+    localeWeekStartsOn == null
+      ? toInteger(defaultOptions.weekStartsOn)
+      : toInteger(localeWeekStartsOn)
   const weekStartsOn =
     options.weekStartsOn == null
       ? defaultWeekStartsOn
